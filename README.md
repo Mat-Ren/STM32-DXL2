@@ -41,7 +41,7 @@ STM32 の HAL の UART（`HAL_HalfDuplex_*`）だけを使っています。UART
 - **コンパイルを確認**：arm-none-eabi-gcc 14.3 で、`-Wall -Wextra -Wshadow -Wconversion` の警告なしにコンパイルできた（gnu11 と c99）
 - **動く見込み**：同じ HAL の関数とマクロを使っているので動くはずだが、まだ確かめていない
 
-※1 実機で確かめたのは、このライブラリのもとになった版です（Ping・Read・Write・Sync Write・Reboot）。名前をそろえて公開用に整えたこの版と、`dxl2_sync_read`、受け取るときのバイトスタッフィングは、まだ実機で確かめていません。
+※1 この版で、`dxl2_init`・`dxl2_ping`・`dxl2_read`・`dxl2_write1`・`dxl2_write2`・`dxl2_sync_write`・`dxl2_reboot` を実機で確かめました（12 個のモーターを動かすロボットのファームウェアで使用）。`dxl2_sync_read`・`dxl2_write4`・`dxl2_write`、受け取るときのバイトスタッフィングは、まだ実機で確かめていません。
 
 ほかのシリーズで動いた・動かなかった、という報告を歓迎します。
 
@@ -151,7 +151,7 @@ if (dxl2_ping(1, &model, NULL) == DXL2_OK) {
 | STM32C0, F0, F7, G0, **G4**, H5, H7, L0, L4, L4+, L5, U0, U5, WB, WBA, WL | new (same as F3) | expected to work, not tested |
 | STM32F1, F2, F4, L1 | old | dedicated code path, expected to work, not tested |
 
-\* Hardware tests were done with the version this library was derived from (Ping, Read, Write, Sync Write, Reboot). This cleaned-up version, `dxl2_sync_read`, and receive-side byte stuffing have not been tested on hardware yet. Reports for other series are welcome.
+\* This version was tested on hardware with `dxl2_init`, `dxl2_ping`, `dxl2_read`, `dxl2_write1`, `dxl2_write2`, `dxl2_sync_write`, and `dxl2_reboot` (used in the firmware of a robot with 12 servos). `dxl2_sync_read`, `dxl2_write4`, `dxl2_write`, and receive-side byte stuffing have not been tested on hardware yet. Reports for other series are welcome.
 
 **Wiring**: TX pin as open-drain with an external pull-up (e.g. 1 kΩ to 3.3 V, use a 5 V tolerant pin), common GND, servo power from its own supply. With many servos the internal pull-ups add up; use a tri-state buffer (e.g. 74LVC2G241) for higher baud rates or long chains. When mixing servos with different supply voltages, do not connect their VDD lines.
 
